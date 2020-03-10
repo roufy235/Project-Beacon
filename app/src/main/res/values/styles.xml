@@ -1,0 +1,61 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:textViewStyle">@style/vollkorn</item>
+        <item name="buttonStyle">@style/vollkornButtonStyle</item>
+        <item name="editTextStyle">@style/vollkornEditText</item>
+
+    </style>
+
+
+
+    <style name="noActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:textViewStyle">@style/vollkorn</item>
+        <item name="buttonStyle">@style/vollkornButtonStyle</item>
+        <item name="editTextStyle">@style/vollkornEditText</item>
+
+    </style>
+
+    <style name="vollkornButtonStyle" parent="android:Widget.Holo.Button">
+        <item name="android:fontFamily">@font/source_serif_pro_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/source_serif_pro_regular</item>
+    </style>
+
+    <style name="vollkornEditText" parent="android:Widget.EditText">
+        <item name="android:fontFamily">@font/source_serif_pro_regular</item>
+        <item name="fontFamily">@font/source_serif_pro_regular</item>
+    </style>
+
+    <style name="vollkorn" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/source_serif_pro_regular</item>
+        <item name="fontFamily">@font/source_serif_pro_regular</item>
+    </style>
+
+    <style name="vollkornBold" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/merriweather_bold</item>
+        <item name="fontFamily">@font/merriweather_bold</item>
+    </style>
+
+    <style name="vollkornBoldStyled" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/pacifico_regular</item>
+        <item name="fontFamily">@font/pacifico_regular</item>
+    </style>
+    <style name="vollkornBoldStyledTwo" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/staatliches_regular</item>
+        <item name="fontFamily">@font/staatliches_regular</item>
+    </style>
+
+
+</resources>

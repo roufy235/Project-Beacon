@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".MainActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/app_name"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:layout_marginStart="10dp"
+                android:layout_centerVertical="true"
+                android:textColor="@color/white"
+                style="@style/vollkornBoldStyled"
+                android:layout_height="wrap_content"/>
+
+
+            <ImageButton
+                android:id="@+id/profileBtn"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:scaleType="centerCrop"
+                android:layout_marginEnd="10dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_account_circle_white_24dp" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="Emit an emergency message below"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:layout_margin="15dp"
+            android:layout_gravity="center_horizontal"
+            android:textSize="18sp"
+            android:layout_height="wrap_content"/>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_margin="20dp"
+            android:hint="Emergency text here"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_height="wrap_content">
+
+
+            <EditText
+                android:id="@+id/editText2"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/emergencyBtn"
+            android:layout_width="match_parent"
+            android:layout_marginStart="50dp"
+            android:text="@string/broadcast"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            app:rippleColor="@color/colorText"
+            android:layout_marginEnd="60dp"
+            android:layout_height="60dp"/>
+
+
+    </LinearLayout>
+
+</ScrollView>

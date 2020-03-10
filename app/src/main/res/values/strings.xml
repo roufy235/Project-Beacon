@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Beacon</string>
+    <string name="project_beacon">Project Beacon</string>
+    <string name="email_address">Email Address</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="password">Password</string>
+    <string name="name">Name</string>
+    <string name="repeat_password">Repeat Password</string>
+    <string name="already_a_member_sign_in">
+        Already a member, <font color="#03A9F4"><b>Sign In</b></font></string>
+    <string name="sign_in">Sign In</string>
+    <string name="profile">Profile</string>
+    <string name="broadcast">Broadcast</string>
+    <string name="phone_number">Phone Number</string>
+</resources>
