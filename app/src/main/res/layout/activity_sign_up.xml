@@ -123,6 +123,7 @@
 
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/signUpBtnClicked"
             android:layout_width="match_parent"
             android:text="@string/sign_up"
             android:textAllCaps="false"

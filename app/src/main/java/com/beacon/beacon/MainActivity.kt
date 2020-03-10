@@ -9,9 +9,18 @@ import android.view.View
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.beacon.beacon.utilities.roufy235ActivityTransition
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
+
+    private lateinit var mAuth : FirebaseAuth
+    private  var currentUser : FirebaseUser? = null
+    private lateinit var database : FirebaseDatabase
+    private lateinit var mRef : DatabaseReference
 
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,6 +28,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         profileBtn.setOnClickListener(this)
         emergencyBtn.setOnClickListener(this)
+
+        mAuth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance()
+        mRef = database.reference
+    }
+
+    override fun onStart() {
+        super.onStart()
+        currentUser = mAuth.currentUser
     }
 
     override fun onClick(v: View?) {
