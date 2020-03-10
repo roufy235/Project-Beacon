@@ -4,11 +4,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
 import android.widget.Toast
 import com.beacon.beacon.utilities.roufy235ActivityTransition
-import com.beacon.beacon.utilities.setUserInfo
-import com.beacon.beacon.utilities.validateEditText
+import com.beacon.beacon.utilities.roufy235SetUserInfo
+import com.beacon.beacon.utilities.roufy235ValidateEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
@@ -61,11 +60,11 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
         val phone = editTextPhone
         val password = editTextPassword
         val rPassword = editTextRepeatPassword
-        if (name.validateEditText()) {
-            if (email.validateEditText()) {
-                if (phone.validateEditText()) {
-                    if (password.validateEditText()) {
-                        if (rPassword.validateEditText()) {
+        if (name.roufy235ValidateEditText()) {
+            if (email.roufy235ValidateEditText()) {
+                if (phone.roufy235ValidateEditText()) {
+                    if (password.roufy235ValidateEditText()) {
+                        if (rPassword.roufy235ValidateEditText()) {
                             if (password.text.toString() == rPassword.text.toString()) {
                                 val dialog = SpotsDialog.Builder()
                                     .setContext(this)
@@ -82,7 +81,7 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
                                             data["name"] = name.text.toString()
                                             data["email"] = email.text.toString()
                                             data["phone"] = phone.text.toString()
-                                            mRef.setUserInfo(data).addOnCompleteListener {
+                                            mRef.roufy235SetUserInfo(data).addOnCompleteListener {
                                                     dialog.dismiss()
                                                     startActivity(Intent(this, MainActivity::class.java))
                                                     this.roufy235ActivityTransition(true)

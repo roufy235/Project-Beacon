@@ -10,11 +10,11 @@ fun Activity.roufy235ActivityTransition(isFinish : Boolean = false) {
     if (isFinish) this.finish()
 }
 
-fun DatabaseReference.setUserInfo(data : HashMap<String, String>) : Task<Void> {
+fun DatabaseReference.roufy235SetUserInfo(data : HashMap<String, String>) : Task<Void> {
     return this.child("userInfo").setValue(data)
 }
 
-fun EditText.validateEditText() : Boolean {
+fun EditText.roufy235ValidateEditText() : Boolean {
     return if (this.text.toString().isNotEmpty()) {
         true;
     } else {

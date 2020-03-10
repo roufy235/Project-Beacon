@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.beacon.beacon.utilities.roufy235ActivityTransition
-import com.beacon.beacon.utilities.validateEditText
+import com.beacon.beacon.utilities.roufy235ValidateEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import dmax.dialog.SpotsDialog
@@ -44,8 +44,8 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
     private fun signInFunc() {
         val email = editTextName
         val password = editTextPassword
-        if (email.validateEditText()) {
-            if (password.validateEditText()) {
+        if (email.roufy235ValidateEditText()) {
+            if (password.roufy235ValidateEditText()) {
                 val dialog = SpotsDialog.Builder()
                     .setContext(this)
                     .setMessage("Logging")
