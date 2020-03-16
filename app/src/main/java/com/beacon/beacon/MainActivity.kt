@@ -1,12 +1,20 @@
 package com.beacon.beacon
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Looper
 import android.view.View
 import android.widget.Toast
-import cn.pedant.SweetAlert.SweetAlertDialog
+import androidx.core.app.ActivityCompat
 import com.beacon.beacon.utilities.*
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -21,6 +29,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var database : FirebaseDatabase
     private lateinit var mRef : DatabaseReference
     private var myProfileData : HashMap<*, *>? = null
+    private var latitude : Double = 0.0
+    private var logitude : Double = 0.0
 
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,13 +44,66 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         mRef = database.reference
         currentUser = mAuth.currentUser
 
-
+        checkLocationPermission()
         currentUser?.let {
             mRef.roufy235GetProfile(it.uid) { nullData ->
                 myProfileData = nullData
             }
         }
 
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode) {
+            2000 -> {
+                if (grantResults.isNotEmpty()) {
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        checkLocationPermission()
+                    } else {
+                        Toast.makeText(this, "Permission Denied", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun checkLocationPermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 2000)
+                return
+            }
+        }
+        getPhoneLocation()
+    }
+
+
+
+    private fun getPhoneLocation() {
+        val locationRequest = LocationRequest()
+        locationRequest.interval = 10000
+        locationRequest.fastestInterval = 3000
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+
+        LocationServices.getFusedLocationProviderClient(this)
+            .requestLocationUpdates(locationRequest, object : LocationCallback(){
+                override fun onLocationResult(p0: LocationResult?) {
+                    super.onLocationResult(p0)
+                    LocationServices.getFusedLocationProviderClient(this@MainActivity)
+                        .removeLocationUpdates(this)
+                    if (p0 != null && p0.locations.size > 0) {
+                        val lastLocationIndex = p0.locations.size - 1
+                        latitude = p0.locations[lastLocationIndex].latitude
+                        logitude = p0.locations[lastLocationIndex].longitude
+
+                    }
+                }
+            }, Looper.getMainLooper())
     }
 
 
@@ -52,13 +115,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 .setPositiveButton("Yes") {dialog, which ->
                     dialog.dismiss()
                     if (currentUser != null && myProfileData != null) {
+                        checkLocationPermission()
                         val myAlert = this.roufy235SweetAlertDialogProgress("Broadcasting")
-                        val emergencyData = HashMap<String, String>()
+                        val emergencyData = HashMap<String, Any>()
                         val uid = currentUser!!.uid
                         emergencyData["name"] = myProfileData!!["name"].toString()
                         emergencyData["uui"] = uid
                         emergencyData["emergencyMessage"] = emergencyTextStr
                         emergencyData["timeStamp"] = System.currentTimeMillis().toString()
+                        emergencyData["lat"] = latitude
+                        emergencyData["lng"] = logitude
 
                         mRef.roufy235EmergencyInfo(uid, emergencyData)
                             .addOnCompleteListener {

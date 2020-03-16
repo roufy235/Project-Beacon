@@ -59,7 +59,7 @@ fun Activity.roufy235SweetAlertDialogProgress(message : String) : SweetAlertDial
     return myAlert
 }
 
-fun DatabaseReference.roufy235EmergencyInfo(userId : String, data : HashMap<String, String>) : Task<Void> {
+fun DatabaseReference.roufy235EmergencyInfo(userId : String, data : HashMap<String, Any>) : Task<Void> {
     return this.child("emergency").child(userId).push().setValue(data)
 }
 
