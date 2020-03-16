@@ -56,13 +56,13 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_margin="20dp"
-            android:hint="Emergency text here"
+            android:hint="@string/emergency_text_here"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_height="wrap_content">
 
 
             <EditText
-                android:id="@+id/editText2"
+                android:id="@+id/emergencyText"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_weight="1"

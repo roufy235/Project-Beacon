@@ -12,4 +12,5 @@
     <string name="profile">Profile</string>
     <string name="broadcast">Broadcast</string>
     <string name="phone_number">Phone Number</string>
+    <string name="emergency_text_here">Emergency text here</string>
 </resources>

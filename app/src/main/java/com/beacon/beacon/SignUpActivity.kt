@@ -65,39 +65,45 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
                 if (phone.roufy235ValidateEditText()) {
                     if (password.roufy235ValidateEditText()) {
                         if (rPassword.roufy235ValidateEditText()) {
-                            if (password.text.toString() == rPassword.text.toString()) {
-                                val dialog = SpotsDialog.Builder()
-                                    .setContext(this)
-                                    .setMessage("Processing")
-                                    .setCancelable(false)
-                                    .build()
-                                    .apply {
-                                        show()
-                                    }
-                                mAuth.createUserWithEmailAndPassword(email.text.toString(), password.text.toString())
-                                    .addOnCompleteListener { task ->
-                                        if (task.isComplete) {
-                                            val data = HashMap<String, String>()
-                                            data["name"] = name.text.toString()
-                                            data["email"] = email.text.toString()
-                                            data["phone"] = phone.text.toString()
-                                            mRef.roufy235SetUserInfo(data).addOnCompleteListener {
-                                                    dialog.dismiss()
-                                                    startActivity(Intent(this, MainActivity::class.java))
-                                                    this.roufy235ActivityTransition(true)
-                                            }
-                                                .addOnFailureListener {
-                                                    dialog.dismiss()
-                                                    Toast.makeText(this, "Unable to create account", Toast.LENGTH_LONG).show()
-                                                }
-                                        } else {
-                                            dialog.dismiss()
-                                            Toast.makeText(this, "Invalid email and password", Toast.LENGTH_LONG).show()
+                            if (password.text.toString().length >= 6) {
+                                if (password.text.toString() == rPassword.text.toString()) {
+                                    val dialog = SpotsDialog.Builder()
+                                        .setContext(this)
+                                        .setMessage("Processing")
+                                        .setCancelable(false)
+                                        .build()
+                                        .apply {
+                                            show()
                                         }
-                                    }
+                                    mAuth.createUserWithEmailAndPassword(email.text.toString(), password.text.toString())
+                                        .addOnCompleteListener { task ->
+                                            if (task.isComplete) {
+                                                val data = HashMap<String, String>()
+                                                data["name"] = name.text.toString()
+                                                data["email"] = email.text.toString()
+                                                data["phone"] = phone.text.toString()
+                                                val uid = task.result?.user?.uid
+                                                mRef.roufy235SetUserInfo(uid!!, data).addOnCompleteListener {
+                                                        dialog.dismiss()
+                                                        startActivity(Intent(this, MainActivity::class.java))
+                                                        this.roufy235ActivityTransition(true)
+                                                    }
+                                                    .addOnFailureListener {
+                                                        dialog.dismiss()
+                                                        Toast.makeText(this, "Unable to create account", Toast.LENGTH_LONG).show()
+                                                    }
+                                            } else {
+                                                dialog.dismiss()
+                                                Toast.makeText(this, "Invalid email and password", Toast.LENGTH_LONG).show()
+                                            }
+                                        }
+                                } else {
+                                    Toast.makeText(this, "Password mismatch", Toast.LENGTH_LONG).show()
+                                }
                             } else {
-                                Toast.makeText(this, "Password mismatch", Toast.LENGTH_LONG).show()
+                                Toast.makeText(this, "Password must at least 6 characters", Toast.LENGTH_LONG).show()
                             }
+
                         }
                     }
                 }

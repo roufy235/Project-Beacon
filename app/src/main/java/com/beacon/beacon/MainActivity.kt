@@ -1,13 +1,12 @@
 package com.beacon.beacon
 
 import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
+import android.widget.Toast
 import cn.pedant.SweetAlert.SweetAlertDialog
-import com.beacon.beacon.utilities.roufy235ActivityTransition
+import com.beacon.beacon.utilities.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -21,6 +20,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private  var currentUser : FirebaseUser? = null
     private lateinit var database : FirebaseDatabase
     private lateinit var mRef : DatabaseReference
+    private var myProfileData : HashMap<*, *>? = null
 
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,11 +32,57 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         mAuth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
         mRef = database.reference
+        currentUser = mAuth.currentUser
+
+
+        currentUser?.let {
+            mRef.roufy235GetProfile(it.uid) { nullData ->
+                myProfileData = nullData
+            }
+        }
+
     }
 
-    override fun onStart() {
-        super.onStart()
-        currentUser = mAuth.currentUser
+
+    private fun sendEmergencyMessage() {
+        val emergencyTextStr = emergencyText.text.toString()
+        if (emergencyTextStr.isNotEmpty()) {
+            MaterialAlertDialogBuilder(this)
+                .setMessage("Are you sure you want to sent this broadcast?")
+                .setPositiveButton("Yes") {dialog, which ->
+                    dialog.dismiss()
+                    if (currentUser != null && myProfileData != null) {
+                        val myAlert = this.roufy235SweetAlertDialogProgress("Broadcasting")
+                        val emergencyData = HashMap<String, String>()
+                        val uid = currentUser!!.uid
+                        emergencyData["name"] = myProfileData!!["name"].toString()
+                        emergencyData["uui"] = uid
+                        emergencyData["emergencyMessage"] = emergencyTextStr
+                        emergencyData["timeStamp"] = System.currentTimeMillis().toString()
+
+                        mRef.roufy235EmergencyInfo(uid, emergencyData)
+                            .addOnCompleteListener {
+                                if (it.isSuccessful) {
+                                    myAlert.dismiss()
+                                    emergencyText.setText("")
+                                    this.roufy235SweetAlertDialogSuccess("Good job!", "Broadcasted to appropriate agencies")
+                                }
+                            }
+                            .addOnFailureListener {
+                                myAlert.dismiss()
+                                this.roufy235SweetAlertDialogError("Oops!", "Unable to send broadcast")
+                            }
+                    } else {
+                        Toast.makeText(this, "Invalid account", Toast.LENGTH_LONG).show()
+                    }
+                }
+                .setNegativeButton("No", null)
+                .setCancelable(false)
+                .show()
+        } else {
+            emergencyText.roufy235ValidateEditText()
+        }
+
     }
 
     override fun onClick(v: View?) {
@@ -47,28 +93,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     this.roufy235ActivityTransition()
                 }
                 R.id.emergencyBtn -> {
-                    MaterialAlertDialogBuilder(this)
-                        .setMessage("Are you sure you want to sent this broadcast?")
-                        .setPositiveButton("Yes") {dialog, which ->
-                            dialog.dismiss()
-                            val myAlert = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
-                            myAlert.progressHelper.barColor = Color.parseColor("#A5DC86")
-                            myAlert.titleText = "Broadcasting"
-                            myAlert.setCancelable(false)
-                            myAlert.show()
-
-                            Handler().postDelayed({
-                                myAlert.dismiss()
-                                SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-                                    .setTitleText("Good job!")
-                                    .setContentText("Broadcasted to appropriate agencies")
-                                    .show();
-                            }, 2000)
-
-                        }
-                        .setNegativeButton("No", null)
-                        .setCancelable(false)
-                        .show()
+                    sendEmergencyMessage();
                 }
                 else -> {}
             }
